@@ -1,6 +1,8 @@
 #plots single or stacked histograms
 #note: stack hist is made in plan for the resolution histograms
 
+import matplotlib.pyplot as plt
+
 def hist(array, xlabel, ylabel = '', title = '', directory = '',color = 'b'):
     #this function plots individual histograms of each of the variables
 
@@ -24,7 +26,7 @@ def stack_hist(arrays, xlabel, ylabel = '', title = '', directory = '', xmin=-10
     fig = plt.figure()
 
     #plot the histogram and save to file
-    plt.hist(arrays, 500, stacked=True)
+    plt.hist(arrays, 500, histtype = 'barstacked')
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)

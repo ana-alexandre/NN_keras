@@ -1,4 +1,4 @@
-##NN - preprocessing
+##NN Z- preprocessing
 #for network in keras
 
 #reads in the h5 file
@@ -6,16 +6,17 @@
 #and turns it into a torch tensor
 
 import numpy as np
-from Read_h5_hist import read_input,save_jets,hist#####!!!!!!this will need updating!!!!!
+from read_h5 import read_input,save_jets
+from hist import hist
 from sklearn.preprocessing import normalize
 from sklearn.model_selection import train_test_split
 
-def datasets():
+def datasets(file_name):
     
     #read in the h5 file into a dataset
     #this will also print the shape of the file
     #and the column names and data types
-    dset = read_input('input.h5')
+    dset = read_input(file_name)
     data_points = dset.shape[0]
 
     #save the total number of columns
@@ -33,6 +34,8 @@ def datasets():
 
         temp = save_jets(dset,i,data_points)
         temp = np.reshape(temp, (116655,1))
+        
+        #hist(temp, 'column '+str(i))
 
         if i==min_target: #if the column is the TruthPt column
             targets = np.concatenate((targets,temp),axis=1)
@@ -41,7 +44,7 @@ def datasets():
             inputs = np.concatenate((inputs,temp),axis=1)
 
 
-    print('\ntargets:\n',targets[2405:2408],'\ninputs:\n',inputs[2405:2408])
+    #print('\ntargets:\n',targets[2405:2408],'\ninputs:\n',inputs[2405:2408])
 
     #normalise the inputs
     #without normalizing the bolean columns
@@ -50,10 +53,13 @@ def datasets():
     inputs_norm2 = normalize(inputs[:, [11,12,13,14]], axis=0)
     #join the arrays together
     args = (inputs_norm1, inputs[:,[8,9,10]],inputs_norm2,inputs[:,[15,16,17]])
-    inputs_ = np.concatenate(args, axis=1)
+    inputs = np.concatenate(args, axis=1)
+
+    #for i in range(18):
+        #hist(inputs[:,[i]],'column '+str(i+1))
 
     #print a histogram of the target distribution (Truth Pt)
-    hist(targets,'TruthPt',title='targets')
+    #hist(targets,'TruthPt',title='targets')
     #print a few of the targets and the corresponding inputs
     #(the numbers were chosen so that one of the targets has a lepton present)
     print('targets: ',targets[2405:2410],'inputs: ',inputs[2405:2410])
