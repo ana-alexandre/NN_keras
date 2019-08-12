@@ -1,0 +1,3 @@
+#ignore input files
+*.root
+*.h5
